@@ -1,0 +1,27 @@
+server:
+  port: 9091
+
+info:
+  app:
+    name: PriceApi
+    version: 1.0.0
+    description: PriceApiDescripcion
+
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: password
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  jpa:
+    hibernate:
+      ddl-auto: none
+    spring.jpa.database-platform: org.hibernate.dialect.H2Dialect
+  sql:
+    init:
+      platform: org.hibernate.dialect.H2Dialect
+      mode: always
