@@ -8,7 +8,11 @@ import com.zara.priceapi.domain.model.exception.PriceException;
 import com.zara.priceapi.domain.port.out.PricePersistencePort;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -19,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Stream;
 
 public class PriceServiceTest {
 
@@ -32,67 +37,29 @@ public class PriceServiceTest {
         MockitoAnnotations.openMocks(this);
     }
 
-    @Test
-    public void whenPricesFound_thenReturnHighestPriorityPrice_whenDateIs14thAnd10hrs() {
-        LocalDateTime applicationDate = LocalDateTime.parse("2020-06-14 10:00:00", UtilPriceTest.formatter);
-        Long productId = 35455L;
-        Long brandId = 1L;
-        double priorityPriceResult = 35.50;
-        Mockito.when(pricePersistencePort.findApplicablePrice(applicationDate, productId, brandId)).thenReturn(filterPriceListByApplicationDateAndProductIdAndBranId(applicationDate, brandId, productId));
-        PriceCalculationDto result = priceFacade.handle(new PriceCalculateCommand(applicationDate, productId, brandId));
-        Assertions.assertNotNull(result);
-        Assertions.assertEquals(priorityPriceResult, result.getFinalPrice());
+    private static Stream<Arguments> dataTestPricesAndDates() {
+        return Stream.of(
+                Arguments.of("2020-06-14 10:00:00", 35.50, "10AM14th"),
+                Arguments.of("2020-06-14 16:00:00", 25.45, "4PM14th"),
+                Arguments.of("2020-06-14 21:00:00", 35.50, "9PM14th"),
+                Arguments.of("2020-06-14 21:00:00", 35.50, "9PM14th"),
+                Arguments.of("2020-06-15 10:00:00", 30.50, "10AM15th"),
+                Arguments.of("2020-06-16 21:00:00", 38.95, "9PM16th")
+        );
     }
 
-    @Test
-    public void whenPricesFound_thenReturnHighestPriorityPrice_whenDateIs14thAnd16hrs() {
-        LocalDateTime applicationDate = LocalDateTime.parse("2020-06-14 16:00:00", UtilPriceTest.formatter);
+    @DisplayName("GroupTestWithDateAndHoursValidation")
+    @ParameterizedTest(name = "whenDateIs_{2}_thenReturnPrice_{1}")
+    @MethodSource("dataTestPricesAndDates")
+    public void whenPricesFound_thenReturnHighestPriorityPrice(String date, double expectedPrice, String nametest) {
+        LocalDateTime applicationDate = LocalDateTime.parse(date, UtilPriceTest.formatter);
         Long productId = 35455L;
         Long brandId = 1L;
-        double priorityPriceResult = 25.45;
-        Mockito.when(pricePersistencePort.findApplicablePrice(applicationDate, productId, brandId)).thenReturn(filterPriceListByApplicationDateAndProductIdAndBranId(applicationDate, brandId, productId));
+        Mockito.when(pricePersistencePort.findApplicablePrice(applicationDate, productId, brandId))
+                .thenReturn(filterPriceListByApplicationDateAndProductIdAndBranId(applicationDate, brandId, productId));
         PriceCalculationDto result = priceFacade.handle(new PriceCalculateCommand(applicationDate, productId, brandId));
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(priorityPriceResult, result.getFinalPrice());
-    }
-
-
-    @Test
-    public void whenPricesFound_thenReturnHighestPriorityPrice_whenDateIs14thAnd21hrs() {
-        LocalDateTime applicationDate = LocalDateTime.parse("2020-06-14 21:00:00", UtilPriceTest.formatter);
-        Long productId = 35455L;
-        Long brandId = 1L;
-        double priorityPriceResult = 35.50;
-        Mockito.when(pricePersistencePort.findApplicablePrice(applicationDate, productId, brandId)).thenReturn(filterPriceListByApplicationDateAndProductIdAndBranId(applicationDate, brandId, productId));
-        PriceCalculationDto result = priceFacade.handle(new PriceCalculateCommand(applicationDate, productId, brandId));
-        Assertions.assertNotNull(result);
-        Assertions.assertEquals(priorityPriceResult, result.getFinalPrice());
-    }
-
-
-    @Test
-    public void whenPricesFound_thenReturnHighestPriorityPrice_whenDateIs15thAnd10hrs() {
-        LocalDateTime applicationDate = LocalDateTime.parse("2020-06-15 10:00:00", UtilPriceTest.formatter);
-        Long productId = 35455L;
-        Long brandId = 1L;
-        double priorityPriceResult = 30.50;
-        Mockito.when(pricePersistencePort.findApplicablePrice(applicationDate, productId, brandId)).thenReturn(filterPriceListByApplicationDateAndProductIdAndBranId(applicationDate, brandId, productId));
-        PriceCalculationDto result = priceFacade.handle(new PriceCalculateCommand(applicationDate, productId, brandId));
-        Assertions.assertNotNull(result);
-        Assertions.assertEquals(priorityPriceResult, result.getFinalPrice());
-    }
-
-
-    @Test
-    public void whenPricesFound_thenReturnHighestPriorityPrice_whenDateIs16thAnd21hrs() {
-        LocalDateTime applicationDate = LocalDateTime.parse("2020-06-16 21:00:00", UtilPriceTest.formatter);
-        Long productId = 35455L;
-        Long brandId = 1L;
-        double priorityPriceResult = 38.95;
-        Mockito.when(pricePersistencePort.findApplicablePrice(applicationDate, productId, brandId)).thenReturn(filterPriceListByApplicationDateAndProductIdAndBranId(applicationDate, brandId, productId));
-        PriceCalculationDto result = priceFacade.handle(new PriceCalculateCommand(applicationDate, productId, brandId));
-        Assertions.assertNotNull(result);
-        Assertions.assertEquals(priorityPriceResult, result.getFinalPrice());
+        Assertions.assertEquals(expectedPrice, result.getFinalPrice());
     }
 
     @Test
