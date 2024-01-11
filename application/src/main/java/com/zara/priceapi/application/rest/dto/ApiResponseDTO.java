@@ -1,4 +1,4 @@
-package com.zara.priceapi.infraestructure.adapter.dto;
+package com.zara.priceapi.application.rest.dto;
 
 import lombok.Data;
 

@@ -1,6 +1,6 @@
-package com.zara.priceapi.domain.exception;
+package com.zara.priceapi.domain.model.exception;
 
-import com.zara.priceapi.domain.enumeration.ErrorCodeEnum;
+import com.zara.priceapi.domain.model.enumeration.ErrorCodeEnum;
 import lombok.Getter;
 
 @Getter

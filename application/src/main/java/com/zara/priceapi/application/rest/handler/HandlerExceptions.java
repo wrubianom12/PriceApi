@@ -1,8 +1,8 @@
-package com.zara.priceapi.infraestructure.rest.handler;
+package com.zara.priceapi.application.rest.handler;
 
-import com.zara.priceapi.domain.exception.PriceException;
-import com.zara.priceapi.infraestructure.adapter.dto.ApiResponseDTO;
-import com.zara.priceapi.infraestructure.adapter.dto.ErrorInfoDTO;
+import com.zara.priceapi.application.rest.dto.ApiResponseDTO;
+import com.zara.priceapi.application.rest.dto.ErrorInfoDTO;
+import com.zara.priceapi.domain.model.exception.PriceException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

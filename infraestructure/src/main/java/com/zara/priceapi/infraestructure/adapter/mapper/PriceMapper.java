@@ -1,15 +1,16 @@
 package com.zara.priceapi.infraestructure.adapter.mapper;
 
-import com.zara.priceapi.domain.Price;
+import com.zara.priceapi.domain.model.Price;
 import com.zara.priceapi.infraestructure.adapter.entity.PriceEntity;
 import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring", uses = {PriceMapper.class})
+@Mapper(componentModel = "spring")
 public interface PriceMapper {
     @Mappings(
             {

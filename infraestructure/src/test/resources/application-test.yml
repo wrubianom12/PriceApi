@@ -9,7 +9,7 @@ info:
 
 spring:
   datasource:
-    url: jdbc:h2:mem:PriceApiDB
+    url: jdbc:h2:mem:PriceApiDbTest
     driver-class-name: org.h2.Driver
     username: sa
     password: password
