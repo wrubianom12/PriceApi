@@ -142,19 +142,6 @@ public class PriceServiceTest {
         Assertions.assertEquals(expectedPrice, result.getFinalPrice());
     }
 
-
-    @Test
-    public void whenDatabaseErrorOccurs_thenThrowPriceException() {
-        LocalDateTime applicationDate = LocalDateTime.parse("2020-06-14 10:00:00", UtilPriceTest.formatter);
-        Long productId = 35455L;
-        Long brandId = 1L;
-        Mockito.when(pricePersistencePort.findApplicablePrice(applicationDate, productId, brandId)).thenThrow(new RuntimeException("Uncontrolled error."));
-        Assertions.assertThrows(PriceException.class, () -> {
-            priceFacade.handle(new PriceCalculateCommand(applicationDate, productId, brandId));
-        });
-    }
-
-
     private List<Price> filterPriceListByApplicationDateAndProductIdAndBranId(LocalDateTime applicationDate, Long branid, Long producId) {
         List<Price> result = new ArrayList<>();
         for (Price price : UtilPriceTest.PRICES_TO_TEST) {

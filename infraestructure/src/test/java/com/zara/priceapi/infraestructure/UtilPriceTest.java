@@ -1,4 +1,4 @@
-package com.zara.priceapi.application;
+package com.zara.priceapi.infraestructure;
 
 
 
