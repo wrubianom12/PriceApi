@@ -1,6 +1,6 @@
-package com.zara.priceapi.infraestructure;
+package com.zara.priceapi.domain;
 
-import com.zara.priceapi.domain.Price;
+import com.zara.priceapi.domain.model.Price;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;

@@ -1,4 +1,4 @@
-package com.zara.priceapi.domain;
+package com.zara.priceapi.domain.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,20 +7,15 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Price {
+public class PriceCalculationDto {
 
-    private Long id;
-    private Long brandId;
-    private LocalDateTime startDate;
-    private LocalDateTime endDate;
-    private Integer priceList;
     private Long productId;
-    private Integer priority;
-    private double price;
-    private String curr;
+    private Long brandId;
+    private Double finalPrice;
+    private LocalDateTime endDate;
+    private LocalDateTime startDate;
 }

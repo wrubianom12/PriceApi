@@ -1,4 +1,4 @@
-package com.zara.priceapi.domain.enumeration;
+package com.zara.priceapi.domain.model.enumeration;
 
 
 import lombok.Getter;

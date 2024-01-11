@@ -1,8 +1,10 @@
-package com.zara.priceapi.infraestructure.rest.controller;
+package com.zara.priceapi.application.rest.controller;
 
 
-import com.zara.priceapi.application.usescases.IPriceService;
-import com.zara.priceapi.domain.PriceCalculationDto;
+import com.zara.priceapi.domain.model.PriceCalculateCommand;
+import com.zara.priceapi.domain.model.PriceCalculationDto;
+import com.zara.priceapi.domain.port.in.PriceCalculateHandler;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,10 +15,10 @@ import java.time.LocalDateTime;
 @RequestMapping("/api/v1")
 public class PriceController {
 
-    private IPriceService iPriceService;
+    private final PriceCalculateHandler priceCalculateHandler;
 
-    public PriceController(IPriceService iPriceService) {
-        this.iPriceService = iPriceService;
+    public PriceController(PriceCalculateHandler priceCalculateHandler) {
+        this.priceCalculateHandler = priceCalculateHandler;
     }
 
     @GetMapping
@@ -24,7 +26,7 @@ public class PriceController {
     public ResponseEntity<PriceCalculationDto> getPrice(@PathVariable("brandId") Long brandId,
                                                         @PathVariable("productId") Long productId,
                                                         @RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime date) {
-        return ResponseEntity.ok(iPriceService.findApplicablePriceByApplicationDateAndProfucIdAndBranId(date, productId, brandId));
+        return ResponseEntity.ok(priceCalculateHandler.handle(new PriceCalculateCommand(date, productId, brandId)));
     }
 
 }
